@@ -9,10 +9,10 @@ MODDIR=${0%/*}
     while [ "$(getprop sys.boot_completed)" != "1" ]; do
        sleep 30
     done
-    sh $MODDIR/np.sh
+    sh $MODDIR/2.sh
+    sh $MODDIR/cancer.sh
     sh $MODDIR/core.sh
     sh $MODDIR/mifuck.sh
     sh $MODDIR/cobb.sh
     sh $MODDIR/deamon.sh
     sleep 20
-    sh $MODDIR/stop.sh

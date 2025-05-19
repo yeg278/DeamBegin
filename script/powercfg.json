@@ -1,0 +1,14 @@
+{
+    "name": "Uperf of daily",
+    "author": "🌸枫🌸",
+    "version": "1.8",
+    "versionCode": 1.8,
+    "features": {
+        "strict": true,
+        "pedestal": true
+    },
+    "module": "uperf,sfanalysis",
+    "state": "/sdcard/Android/yc/uperf/cur_powermode.txt",
+    "entry": "/data/powercfg.sh",
+    "projectUrl": "https://github.com/yc9559/uperf"
+}

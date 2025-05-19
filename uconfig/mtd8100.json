@@ -1,0 +1,571 @@
+{
+  "meta": {
+    "name": "Dimensity 8100/8200(mt6895)",
+    "author": "yc@coolapk 枫改"
+  },
+  "modules": {
+    "switcher": {
+      "switchInode": "/sdcard/Android/yc/uperf/cur_powermode.txt",
+      "perapp": "/sdcard/Android/yc/uperf/perapp_powermode.txt",
+      "hintDuration": {
+        "idle": 0,
+        "touch": 4,
+        "trigger": 0.03,
+        "gesture": 0.08,
+        "switch": 0.4,
+        "junk": 0.06
+      }
+    },
+    "atrace": {
+      "enable": false
+    },
+    "log": {
+      "level": "info"
+    },
+    "input": {
+      "enable": true,
+      "swipeThd": 0.03,
+      "gestureThdX": 0.03,
+      "gestureThdY": 0.03,
+      "gestureDelayTime": 2,
+      "holdEnterTime": 1
+    },
+    "sfanalysis": {
+      "enable": true,
+      "renderIdleSlackTime": 0.2
+    },
+    "cpu": {
+      "enable": true,
+      "powerModel": [
+        {
+          "efficiency": 110,
+          "nr": 4,
+          "typicalPower": 0.4,
+          "typicalFreq": 1.92,
+          "sweetFreq": 1.46,
+          "plainFreq": 1.18,
+          "freeFreq": 0.7
+        },
+        {
+          "efficiency": 310,
+          "nr": 3,
+          "typicalPower": 1.8,
+          "typicalFreq": 2.9,
+          "sweetFreq": 2.0,
+          "plainFreq": 1.02,
+          "freeFreq": 0.7
+        },
+        {
+          "efficiency": 320,
+          "nr": 1,
+          "typicalPower": 1.8,
+          "typicalFreq": 3.0,
+          "sweetFreq": 2.2,
+          "plainFreq": 1.6,
+          "freeFreq": 0.8
+        }
+      ]
+    },
+    "sysfs": {
+      "enable": true,
+      "knob": {
+        "cpusetTa": "/dev/cpuset/top-app/cpus",
+        "cpusetFg": "/dev/cpuset/foreground/cpus",
+        "cpusetBg": "/dev/cpuset/background/cpus",
+        "cpusetSysBg": "/dev/cpuset/system-background/cpus",
+        "cpusetRe": "/dev/cpuset/restricted/cpus",
+        "ddrMin": "/sys/class/devfreq/mtk-dvfsrc-devfreq/userspace/set_freq"
+      }
+    },
+    "sched": {
+      "enable": true,
+      "cpumask": {
+        "Ta": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "Fg": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "Bg": [
+          0,
+          1,
+          2,
+          3 
+        ]
+      },
+      "affinity": {
+        "auto": {
+          "bg": "",
+          "fg": "",
+          "idle": "",
+          "touch": "",
+          "boost": ""
+        },
+        "norm": {
+          "bg": "Bg",
+          "fg": "Fg",
+          "idle": "Ta",
+          "touch": "Ta",
+          "boost": "Ta"
+        }
+      },
+      "prio": {
+        "auto": {
+          "bg": 0,
+          "fg": 0,
+          "idle": 0,
+          "touch": 0,
+          "boost": 0
+        },
+        "bg": {
+          "bg": -3,
+          "fg": 139,
+          "idle": 139,
+          "touch": 139,
+          "boost": 139
+        },
+        "norm": {
+          "bg": -1,
+          "fg": -1,
+          "idle": 120,
+          "touch": 120,
+          "boost": 130
+        },
+        "ui": {
+          "bg": -3,
+          "fg": 120,
+          "idle": 110,
+          "touch": 98,
+          "boost": 116
+        },
+        "coop":{
+          "bg": -3,
+          "fg":124,
+          "idle":122,
+          "touch":122,
+          "boost":130
+        },
+        "rtusr": {
+          "bg": 98,
+          "fg": 98,
+          "idle": 97,
+          "touch": 97,
+          "boost": 98
+        },
+        "ff": {
+          "bg": 98,
+          "fg": 98,
+          "idle": 98,
+          "touch": 98,
+          "boost": 98
+        },
+        "isnorm": {
+          "bg": -2,
+          "fg": 131,
+          "idle": 120,
+          "touch": 110,
+          "boost": 131
+        }
+      },
+      "rules": [
+        {
+          "name": "Launcher",
+          "regex": "/HOME_PACKAGE/",
+          "pinned": true,
+          "rules": [
+            {
+              "k": "/MAIN_THREAD/",
+              "ac": "auto",
+              "pc": "rtusr"
+            },
+            {
+              "k": "^(RenderThread|GLThread)",
+              "ac": "auto",
+              "pc": "rtusr"
+            },
+            {
+              "k": "^(GPU completion|HWC release|hwui|FramePolicy|ScrollPolicy|ged-swd)",
+              "ac": "auto",
+              "pc": "rtusr"
+            },
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "SurfaceFlinger",
+          "regex": "/system/bin/surfaceflinger",
+          "pinned": true,
+          "rules": [
+            {
+              "k": "/MAIN_THREAD/",
+              "ac": "auto",
+              "pc": "auto"
+            },
+            {
+              "k": "^(app|RenderEngine)",
+              "ac": "auto",
+              "pc": "auto"
+            },
+            {
+              "k": "^Binder:",
+              "ac": "auto",
+              "pc": "auto"
+            },
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "audioserver",
+          "regex": "^audioserver",
+          "pinned": false,
+          "rules": [
+            {
+              "k": ".",
+              "ac": "norm",
+              "pc": "ff"
+            }
+          ]
+        },
+        {
+          "name": "SystemServer",
+          "regex": "system_server",
+          "pinned": true,
+          "rules": [
+            {
+              "k": "^(TaskSnapshot|Greezer|CachedApp|SystemPressure|SensorService)|[Mm]emory",
+              "ac": "auto",
+              "pc": "auto"
+            },
+            {
+              "k": "^Async",
+              "ac": "auto",
+              "pc": "norm"
+            },
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "SystemUI",
+          "regex": "com.android.systemui",
+          "pinned": true,
+          "rules": [
+            {
+              "k": "^(Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD)",
+              "ac": "auto",
+              "pc": "auto"
+            },
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "MediaProvider",
+          "regex": "^com.android.providers.media",
+          "pinned": true,
+          "rules": [
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "bg"
+            }
+          ]
+        },
+        {
+          "name": "Memory reclaim",
+          "regex": "swapd|compactd",
+          "pinned": true,
+          "rules": [
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "bg"
+            }
+          ]
+        },
+        {
+          "name": "Phone",
+          "regex": "com.android.phone",
+          "pinned": false,
+          "rules": [
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "Other system processes",
+          "regex": "^(/system|/vendor|magiskd|zygiskd)|@|-service$",
+          "pinned": false,
+          "rules": [
+            {
+              "k": ".",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "App co-process",
+          "regex": "[.].+:",
+          "pinned": false,
+          "rules": [
+            {
+              "k": "^(Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD)",
+              "ac": "auto",
+              "pc": "auto"
+            }
+          ]
+        },
+        {
+          "name": "Default rule",
+          "regex": ".",
+          "pinned": false,
+          "rules": [
+            {
+              "k": "/MAIN_THREAD/",
+              "ac": "norm",
+              "pc": "ui"
+            },
+            {
+              "k": "AudioTrack",
+              "ac": "norm",
+              "pc": "ff"
+            },
+            {
+              "k": ".",
+              "ac": "norm",
+              "pc": "isnorm"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "initials": {
+    "cpu": {
+      "baseSampleTime": 0.01,
+      "baseSlackTime": 0.01,
+      "latencyTime": 0.5,
+      "slowLimitPower": 3,
+      "fastLimitPower": 6,
+      "fastLimitCapacity": 9,
+      "fastLimitRecoverScale": 0.6,
+      "predictThd": 0.1,
+      "margin": 0.1,
+      "burst": 0.0,
+      "guideCap": true,
+      "limitEfficiency": false
+    },
+    "sysfs": {
+      "cpusetTa": "0-7",
+      "cpusetFg": "0-7",
+      "cpusetBg": "0-3",
+      "cpusetSysBg": "0-3",
+      "cpusetRe": "0-6",
+      "ddrMin": "800000000"
+    },
+    "sched": {
+      "scene": "idle"
+    }
+  },
+  "presets": {
+    "balance": {
+      "*": {
+        "cpu.latencyTime": 0.25,
+        "cpu.slowLimitPower": 2.2,
+        "cpu.fastLimitPower": 4.5,
+        "cpu.fastLimitCapacity": 5,
+        "cpu.margin": 0.18,
+        "sysfs.ddrMin": "3200000000"
+      },
+      "idle": {
+        "cpu.baseSampleTime": 0.04,
+        "cpu.baseSlackTime": 0.08,
+        "cpu.predictThd": 0.1,
+        "cpu.limitEfficiency": true,
+        "sched.scene": "idle"
+      },
+      "touch": {
+        "cpu.baseSampleTime": 0.04,
+        "sched.scene": "touch"
+      },
+      "trigger": {
+        "cpu.margin": 0.55,
+        "sched.scene": "touch"
+      },
+      "gesture": {
+        "cpu.margin": 0.57,
+        "sched.scene": "touch"
+      },
+      "junk": {
+        "cpu.baseSampleTime": 0.04,
+        "cpu.margin": 0.25,
+        "cpu.burst": 0.3,
+        "sched.scene": "touch",
+        "sysfs.ddrMin": "4000000000"
+      },
+      "switch": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 4.3,
+        "cpu.fastLimitPower": 5.0,
+        "cpu.fastLimitCapacity": 250.0,
+        "cpu.margin": 0.4,
+        "cpu.burst": 0.4,
+        "sched.scene": "boost",
+        "sysfs.ddrMin": "3200000000"
+      },
+      "swjunk": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 4.8,
+        "cpu.fastLimitPower": 5.0,
+        "cpu.fastLimitCapacity": 240.0,
+        "cpu.margin": 0.42,
+        "cpu.burst": 0.4,
+        "sched.scene": "boost",
+        "sysfs.ddrMin": "3200000000"
+      }
+    },
+    "powersave": {
+      "*": {
+        "cpu.latencyTime": 0.5,
+        "cpu.slowLimitPower": 1.0,
+        "cpu.fastLimitPower": 2.0,
+        "cpu.fastLimitCapacity": 0.5,
+        "cpu.burst": 0.1,
+        "cpu.margin": 0.1
+      },
+      "idle": {
+        "cpu.baseSampleTime": 0.05,
+        "cpu.baseSlackTime": 0.08,
+        "cpu.predictThd": 1,
+        "cpu.limitEfficiency": true,
+        "sched.scene": "idle"
+      },
+      "touch": {
+        "cpu.baseSampleTime": 0.05,
+        "sched.scene": "touch"
+      },
+      "trigger": {
+        "cpu.latencyTime": 0,
+        "cpu.margin": 0.3,
+        "cpu.burst": 0.1,
+        "sched.scene": "touch"
+      },
+      "gesture": {
+        "cpu.margin": 0.3,
+        "cpu.burst": 0.1,
+        "sched.scene": "touch"
+      },
+      "junk": {
+        "cpu.baseSampleTime": 0.04,
+        "cpu.burst": 0.2,
+        "sched.scene": "touch"
+      },
+      "switch": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 1.8,
+        "cpu.fastLimitPower": 1.8,
+        "cpu.fastLimitRecoverScale": 0.05,
+        "cpu.margin": 0.2,
+        "sched.scene": "boost"
+      }
+    },
+    "performance": {
+      "*": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 2,
+        "cpu.fastLimitPower": 2.2,
+        "cpu.fastLimitCapacity": 16
+        "cpu.margin": 0.2,
+        "sysfs.ddrMin": "4266000000"
+      },
+      "idle": {
+        "cpu.baseSampleTime": 0.03,
+        "cpu.baseSlackTime": 0.05,
+        "sched.scene": "idle"
+      },
+      "touch": {
+        "sched.scene": "touch"
+      },
+      "trigger": {
+        "cpu.margin": 0.3,
+        "sched.scene": "touch"
+      },
+      "gesture": {
+        "cpu.margin": 0.4,
+        "sched.scene": "touch"
+      },
+      "junk": {
+        "cpu.burst": 0.5,
+        "sched.scene": "touch"
+      },
+      "switch": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 3.0,
+        "cpu.fastLimitPower": 5.0,
+        "cpu.limitEfficiency": true,
+        "cpu.margin": 0.38,
+        "sched.scene": "boost",
+        "sysfs.ddrMin": "5500000000"
+      }
+    },
+    "fast": {
+      "*": {
+        "cpu.latencyTime": 0.0,
+        "cpu.slowLimitPower": 4.0,
+        "cpu.fastLimitPower": 10.0,
+        "cpu.fastLimitCapacity": 999.0,
+        "cpu.margin": 0.7,
+        "sysfs.ddrMin": "5500000000"
+      },
+      "idle": {
+        "sched.scene": "idle"
+      },
+      "touch": {
+        "sched.scene": "touch"
+      },
+      "trigger": {
+        "sched.scene": "touch"
+      },
+      "gesture": {
+        "sched.scene": "touch"
+      },
+      "junk": {
+        "sched.scene": "touch"
+      },
+      "switch": {
+        "sched.scene": "boost"
+      }
+    }
+  }
+}
